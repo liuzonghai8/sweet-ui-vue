@@ -11,6 +11,9 @@ import App from './App.vue'
 import router from '@/router'
 import store from '@/store'
 
+//permission control
+import './permission'
+
 // Sync store with router
 sync(store, router)
 Vue.config.productionTip = false
