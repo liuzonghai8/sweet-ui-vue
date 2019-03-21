@@ -1,9 +1,10 @@
 import Vue from 'vue'
-import './plugins/axios'
-
 
 //Plugins
 import './plugins'
+
+// Sync router with store
+import { sync } from 'vuex-router-sync'
 
 //
 import App from './App.vue'
@@ -19,3 +20,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
