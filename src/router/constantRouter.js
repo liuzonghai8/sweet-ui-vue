@@ -41,13 +41,24 @@ export default [
     {
         path: '/form',
         component: Layout,
+        name: 'sys',
+        meta: {
+            title: 'sys',
+            icon: 'sys'
+        },
         children: [
             {
                 path: 'index',
                 name: 'Form',
                 component: () => import('@/views/form/index'),
                 meta: { title: 'Form', icon: 'form' }
-            }
+            },
+            {
+                path: 'user',
+                name: 'user',
+                component: () => import('@/views/sys/user'),
+                meta: { title: 'User', icon: 'user' }
+            },
         ]
     },
 
