@@ -1,4 +1,5 @@
 import { login, logout, getInfo } from '@/api/login'
+import { removeToken } from '@/utils/auth'
 
 export default {
     // 登录
@@ -15,6 +16,7 @@ export default {
             })
         })
     },
+    //test
     TestLogin ({ commit }) {
         commit('SET_TOKEN', 'ddddd')
     },
@@ -57,6 +59,12 @@ export default {
                 reject(error)
             })
         })
+    },
+    //test
+    TestLogOut ({ commit }) {
+        // commit('SET_TOKEN', '')
+        //commit('SET_ROLES', [])
+        removeToken()
     },
 
     // 前端 登出

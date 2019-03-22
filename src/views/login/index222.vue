@@ -1,24 +1,25 @@
 <template>
   <div class="login-container">
     <el-form
-      ref="loginForm"
+      ref="login-form"
       :model="loginForm"
-      :rules="loginRules"
       class="login-form"
       auto-complete="on"
       label-position="left"
     >
-      <h3 class="title">vue-admin-template</h3>
+      <div class="title-container">
+        <h3 class="title">系统登陆</h3>
+      </div>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user"/>
         </span>
         <el-input
-          v-model="loginForm.username"
+          v-model="loginForm.userName"
+          :placeholder="'admin'"
           name="username"
           type="text"
           auto-complete="on"
-          placeholder="username"
         />
       </el-form-item>
       <el-form-item prop="password">
@@ -26,17 +27,18 @@
           <svg-icon icon-class="password"/>
         </span>
         <el-input
-          :type="pwdType"
           v-model="loginForm.password"
+          :type="passwordType"
+          :placeholder="111111"
           name="password"
           auto-complete="on"
-          placeholder="password"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'"/>
+          <svg-icon :icon-class="passwordType ? 'eye' : 'eye-open'"/>
         </span>
       </el-form-item>
+
       <el-form-item>
         <el-button
           :loading="loading"
@@ -46,87 +48,62 @@
         >Sign in</el-button>
       </el-form-item>
       <div class="tips">
-        <span style="margin-right:20px;">建议使用的浏览器</span>
-        <!-- <span>password: admin</span> -->
+        <span style="margin-right:20px;">建议使用浏览器：Google、火狐、Ege</span>
       </div>
     </el-form>
   </div>
 </template>
-
 <script>
-import { isvalidUsername } from '@/utils/validate'
-
 export default {
-  name: 'Login',
+  name: 'login',
   data () {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        userName: '',
+        password: ''
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
-      },
-      loading: false,
-      pwdType: 'password',
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
+      passwordType: 'password',
+      loading: false
     }
   },
   methods: {
-    showPwd () {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
-      }
-    },
     handleLogin () {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          // this.$store.dispatch('TestLogin', this.loginForm).then(() => {
-          this.$store.dispatch('user/TestLogin').then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+      this.$store.dispatch('user/TestLogin').then(() => {
+        this.loading = false
+        this.$router.push({ path: this.redirect || '/' })
+      }).catch(() => {
+        this.loading = false
       })
+
+      this.$router.push({ path: '/' })
+    },
+
+    showPwd () {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
     }
   }
 }
 </script>
-
 <style rel="stylesheet/scss" lang="scss">
-$bg: #2d3a4b;
+/* 修复input 背景不协调 和光标变色 */
+/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+
+$bg: #283443;
 $light_gray: #eee;
+$cursor: #fff;
+
+@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+  .login-container .el-input input {
+    color: $cursor;
+    &::first-line {
+      color: $light_gray;
+    }
+  }
+}
 
 /* reset element-ui css */
 .login-container {
@@ -142,9 +119,10 @@ $light_gray: #eee;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
       height: 47px;
+      caret-color: $cursor;
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: #fff !important;
+        -webkit-text-fill-color: $cursor !important;
       }
     }
   }
@@ -158,22 +136,23 @@ $light_gray: #eee;
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg: #283a4b;
+$bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
+
 .login-container {
-  position: fixed;
+  min-height: 100%;
   height: 100%;
   width: 100%;
   background-color: $bg;
+  overflow: hidden;
   .login-form {
-    position: absolute;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
   }
   .tips {
     font-size: 14px;
@@ -192,13 +171,23 @@ $light_gray: #eee;
     width: 30px;
     display: inline-block;
   }
-  .title {
-    font-size: 26px;
-    font-weight: 400;
-    color: $light_gray;
-    margin: 0px auto 40px auto;
-    text-align: center;
-    font-weight: bold;
+  .title-container {
+    position: relative;
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+    .set-language {
+      color: #fff;
+      position: absolute;
+      top: 3px;
+      font-size: 18px;
+      right: 0px;
+      cursor: pointer;
+    }
   }
   .show-pwd {
     position: absolute;
@@ -208,6 +197,11 @@ $light_gray: #eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+  .thirdparty-button {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
   }
 }
 </style>

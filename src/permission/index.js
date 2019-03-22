@@ -17,10 +17,7 @@ router.beforeEach((to, from, next) => {
             next({ path: '/' })
             NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
         } else {
-            console.log(store.getters.roles.length)
             if (store.getters.roles.length === 0) {
-                console.log("拉取用户信息")
-                console.log(store)
                 next()
                 //TODO  需要完成用户拉去操作
                 // store.dispatch('user/GetInfo').then(res => { // 拉取用户信息
@@ -38,10 +35,8 @@ router.beforeEach((to, from, next) => {
         }
     }
     else {
-        if (whiteList.indexOf(to.path) !== -1) { console.log("whiteList"), next() }
+        if (whiteList.indexOf(to.path) !== -1) { next() }
         else {
-            console.log(NProgress)
-            console.log("重定向")
             next('/login')
             NProgress.done()
         }
