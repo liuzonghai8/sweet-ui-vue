@@ -1,7 +1,9 @@
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 
+import { Message } from 'element-ui'
 import router from '@/router'
+import store from '@/store'
 
 import { getToken } from '@/utils/auth' // getToken from cookie
 
@@ -9,28 +11,30 @@ import { getToken } from '@/utils/auth' // getToken from cookie
 NProgress.configure({ showSpinner: false })// NProgress configuration
 const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
-    console.log(getToken)
     NProgress.start();
-    if (getToken) {
+    if (store.getters.token) {
         if (to.path === '/login') {
-            console.log("ss")
             next({ path: '/' })
             NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
         } else {
-            console.log("esle"),
+            console.log(store.getters.roles.length)
+            if (store.getters.roles.length === 0) {
+                console.log("拉取用户信息")
+                console.log(store)
                 next()
-            // if (store.getters.roles.length === 0) {
-            //     store.dispatch('GetInfo').then(res => { // 拉取用户信息
-            //         next()
-            //     }).catch((err) => {
-            //         store.dispatch('FedLogOut').then(() => {
-            //             Message.error(err || 'Verification failed, please login again')
-            //             next({ path: '/' })
-            //         })
-            //     })
-            // } else {
-            //     next()
-            // }
+                //TODO  需要完成用户拉去操作
+                // store.dispatch('user/GetInfo').then(res => { // 拉取用户信息
+                //     console.log("拉取用户信息2")
+                //     next()
+                // }).catch((err) => {
+                //     store.dispatch('FedLogOut').then(() => {
+                //         Message.error(err || 'Verification failed, please login again')
+                //         next({ path: '/' })
+                //     })
+                // })
+            } else {
+                next()
+            }
         }
     }
     else {

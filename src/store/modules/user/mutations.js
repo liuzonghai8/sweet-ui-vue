@@ -1,11 +1,17 @@
 import { set, toggle } from '@/utils/vuex'
-import { getMenuTree } from '@/api/sys/menu'
 export default {
   //setDrawer: set('drawer'),
   // setImage: set('image'),
   // setColor: set('color'),
   // toggleDrawer: toggle('drawer')
-  setMenus (state) {
-    getMenuTree().then(resp => state.user.menus = resp.data.data)
-  }
+  // SET_TOKEN: (state, token) => {
+  //   state.token = token
+  // },
+  // SET_ROLES: (state, roles) => {
+  //   state.roles = roles
+  // }
+  SET_TOKEN: set('token'),
+  SET_ROLES: set('roles'),
+  SET_AVATAR: set('avatar'),
+  SET_NAME: set('name')
 }

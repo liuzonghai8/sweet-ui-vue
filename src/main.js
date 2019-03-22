@@ -13,7 +13,8 @@ import store from '@/store'
 
 //permission control
 import './permission'
-
+// icon
+import './icons'
 // Sync store with router
 sync(store, router)
 Vue.config.productionTip = false
