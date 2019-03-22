@@ -6,7 +6,7 @@ import './plugins'
 // Sync router with store
 import { sync } from 'vuex-router-sync'
 
-//import '@/styles/index.scss'
+import '@/styles/index.scss' // global css
 //
 import App from './App.vue'
 import router from '@/router'

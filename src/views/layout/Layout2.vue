@@ -2,8 +2,7 @@
 <template>
   <el-container>
     <Sidebar class="sidebar-container"/>
-
-    <el-container>
+    <el-container class="main-container">
       <el-header>
         <Navbar/>
       </el-header>
